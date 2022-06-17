@@ -1,4 +1,3 @@
-# HAHAH
-### this is to kickstart
+# Research
 
-nice
+This repo will contain the various simulations done during Summer'22 for Research.
