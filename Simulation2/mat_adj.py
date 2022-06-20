@@ -30,4 +30,23 @@ def U_synth(u):
             t = np.append(t,I,axis=0)    
             U = np.append(U,t, axis=1)
     return U
+    
+def vectorizer(M):
+    N = M.shape[0]
+    vec = M[1:,0]
+    for i in range(1,N):  
+        vec = append(vec, M[i+1:,i], axis = 0)
+    return vec
 
+def matricizer(vec):
+    N = vec.shape[0]
+    N = int((1+np.sqrt(1+8*N))//2)
+    M = zeros((N,N))
+    k1 = 0
+    k2 = N-1
+    for i in range(N):
+        s = N - i-2
+        M[i+1:,i] = vec[k1:k2]
+        k1 = k2 
+        k2 += s
+    return M + M.T

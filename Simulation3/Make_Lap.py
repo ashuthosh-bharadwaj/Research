@@ -32,3 +32,23 @@ def Store(N):
     pkl.dump(d, open("Deg.pkl", "wb"))
     pkl.dump(a, open("Adj.pkl", "wb"))
     return "./Deg.pkl" , "./Adj.pkl"
+
+def vectorizer(M):
+    N = M.shape[0]
+    vec = M[1:,0]
+    for i in range(1,N):  
+        vec = np.append(vec, M[i+1:,i], axis = 0)
+    return vec
+
+def matricizer(vec):
+    N = vec.shape[0]
+    N = int((1+np.sqrt(1+8*N))//2)
+    M = np.zeros((N,N))
+    k1 = 0
+    k2 = N-1
+    for i in range(N):
+        s = N - i-2
+        M[i+1:,i] = vec[k1:k2]
+        k1 = k2 
+        k2 += s
+    return M + M.T
