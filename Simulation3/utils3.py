@@ -52,3 +52,11 @@ def matricizer(vec):
         k1 = k2 
         k2 += s
     return M + M.T
+
+def SNR_adder(sig, snr):
+    noi = np.random.randn(shape(sig))
+    es = np.sum(s**2)
+    en = np.sum(noi**2)
+    a = np.sqrt(es/((10**snr)*en))
+    return sig + a*noi
+
