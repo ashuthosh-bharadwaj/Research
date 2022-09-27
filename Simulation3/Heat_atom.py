@@ -52,7 +52,55 @@ def CreateNoisySamples(L,s0,dt,Lim,SNR):
         Samples.append(Noisy_Traj[:,i])
 
     return Samples, T
+
+
+def CreateMulNoisySamp(L,s0,dt,Length,SNR):
+    N = L.shape[0]
+    ewL, eVL = linalg.eig(L)
+    SampleswoN = []
+    Samples = []
+    SampleswoN.append(s0)
+
+    j = 0
+    temp = ones(N,)
+
+    while j < Length:
+        j = j+1
+        temp = dot(dot(dot(eVL, diag(exp(-ewL*dt*j))), eVL.T), s0)
+        # Samples.append(SNR_adder(temp,SNR))
+        SampleswoN.append(temp)
+        temp = SampleswoN[j-1]
+
+    del temp
     
+    T = len(SampleswoN)
+
+    TRAJ = s0.reshape(N,1)
+
+    for i in range(1,T):
+        TRAJ = np.append(TRAJ,SampleswoN[i].reshape(N,1),axis=1)
+
+    Noisy_Traj = SNR_adder(TRAJ[0,:],SNR).reshape(1,T)
+
+    for i in range(1,N):
+        Noisy_Traj = np.append(Noisy_Traj, SNR_adder(TRAJ[i,:],SNR).reshape(1,T), axis =0)
+
+    for i in range(T):
+        Samples.append(Noisy_Traj[:,i])
+
+    return Samples
+
+def Combine(lengths,L,dt,SNR):
+    N = L.shape[0]
+    Samples = []
+    k = len(lengths)
+    s = np.random.randn(N,k)
+    for i in range(k):
+        Samples = [Samples, CreateMulNoisySamp(L,s[:,i],dt,lengths[i],SNR)]
+
+    return Samples  
+
+
 
 def Resample(k,Samples,dt):
     T = len(Samples)
