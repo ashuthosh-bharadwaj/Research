@@ -29,9 +29,9 @@ def Make(N):
 
 def Store(N):
     d, a = Make(N)
-    pkl.dump(d, open("Deg.pkl", "wb"))
-    pkl.dump(a, open("Adj.pkl", "wb"))
-    return "./Deg.pkl" , "./Adj.pkl"
+    pkl.dump(d, open("./Data/Deg.pkl", "wb"))
+    pkl.dump(a, open("./Data/Adj.pkl", "wb"))
+    return "./Data/Deg.pkl" , "./Data/Adj.pkl"
 
 def vectorizer(M):
     N = M.shape[0]

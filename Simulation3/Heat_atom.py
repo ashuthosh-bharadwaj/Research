@@ -7,7 +7,7 @@ import matplotlib.pyplot
 def Setup(N):
     np.random.seed(100)   
     d, a = Store(N)
-    # d, a  = "./Deg.pkl", "./Adj.pkl"
+    # d, a  = "./Data/Deg.pkl", "./Data/Adj.pkl"
     D, A = pkl.load(open(d,"rb")), pkl.load(open(a,"rb"))
     L = D - A
     A_gt = A
@@ -15,7 +15,6 @@ def Setup(N):
     np.random.seed(10)
     s0 = numpy.random.randn(N,)
     return L, A_gt, s0,D
-
 
 def CreateNoisySamples(L,s0,dt,Lim,SNR): 
     N = L.shape[0]
@@ -156,10 +155,3 @@ def Combine(lengths,k,L,dt,SNR):
 #     for i in range(k):
 #         Samples = Samples + CreateMulNoisySamp(L,s[:,i],dt,lengths[i],SNR)
 #     return Samples
-
-
-
-
-
-
-
