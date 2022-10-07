@@ -94,6 +94,9 @@ def ErrCheck(Adj_le, A_gt):
     matplotlib.pyplot.matshow(Adj_le)
     return Adj_le, A_gt, norm(vectorizer(A_gt) - vectorizer(Adj_le))/(norm(vectorizer(A_gt)))
 
+def error(Adj_le, A_gt):
+    return Adj_le, A_gt, norm(vectorizer(A_gt) - vectorizer(Adj_le))/(norm(vectorizer(A_gt)))
+
 
 def CreateMulNoisySamp(L,s0,dt,Length,SNR):
     N = L.shape[0]
