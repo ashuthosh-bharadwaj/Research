@@ -20,6 +20,33 @@ def U_synth(u):
             U = np.append(U,t, axis=1)
     return U
 
+def U_synth2(u):
+    N = u.shape[0]
+    for i in range(1,N+1):
+        if i == 1:
+            u_there = (u[i-1,:]*(np.eye(N))[:,i-1]).reshape((N,1))
+            uL = u[i:,:].T
+            I = u[i-1,:]*np.eye(N-i)
+            t = np.append(uL,I,axis=0)
+            t = np.append(u_there,t,axis=1)
+            U = t
+        
+        elif i == N:
+            t = (u[i-1,:]*(np.eye(N))[:,i-1]).reshape((N,1))
+            U = np.append(U,t,axis=1)
+
+        else:
+            u_there = (u[i-1,:]*(np.eye(N))[:,i-1]).reshape((N,1))
+            Z = np.zeros((i-1,N-i))
+            uL = u[i:,:].T
+            I = u[i-1,:]*np.eye(N-i)
+            t = np.append(Z,uL,axis=0)
+            t = np.append(t,I,axis=0)
+            t = np.append(u_there,t,axis=1)    
+            U = np.append(U,t, axis=1)
+
+    return U
+
 def Make(N):
     A_gt = np.abs(np.random.randn(N,N))
     for i in range(N): A_gt[i,i] = 0
@@ -40,6 +67,13 @@ def vectorizer(M):
         vec = np.append(vec, M[i+1:,i], axis = 0)
     return vec
 
+def vectorizer2(M):
+    N = M.shape[0]
+    vec = M[:,0]
+    for i in range(1,N):  
+        vec = np.append(vec, M[i:,i], axis = 0)
+    return vec
+
 def matricizer(vec):
     N = vec.shape[0]
     N = int((1+np.sqrt(1+8*N))//2)
@@ -52,6 +86,19 @@ def matricizer(vec):
         k1 = k2 
         k2 += s
     return M + M.T
+
+def matricizer2(vec):
+    N = vec.shape[0]
+    N = int((-1+np.sqrt(1+8*N))//2)
+    M = np.zeros((N,N))
+    k1 = 0
+    k2 = N
+    for i in range(N):
+        s = N-i-1
+        M[i:,i] = vec[k1:k2]
+        k1 = k2 
+        k2 += s
+    return M + M.T - np.diag(np.diag(M))
 
 def SNR_adder(sig, snr):
     noi = np.random.randn(*np.shape(sig))
