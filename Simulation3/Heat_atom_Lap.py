@@ -15,6 +15,18 @@ def Setup(N):
     s0 = numpy.random.randn(N,)
     return L, L_gt, s0,D
 
+def Setup2(N,s1,s2):
+    np.random.seed(s1)   
+    d, a = Store(N)
+    # d, a  = "./Data/Deg.pkl", "./Data/Adj.pkl"
+    D, A = pkl.load(open(d,"rb")), pkl.load(open(a,"rb"))
+    L = D - A
+    L_gt = L
+    np.random.seed(s2)
+    s0 = numpy.random.randn(N,)
+    return L, L_gt, s0,D
+
+
 def CreateNoisySamples(L,s0,dt,Lim,SNR): 
     N = L.shape[0]
     ewL, eVL = linalg.eig(L)
