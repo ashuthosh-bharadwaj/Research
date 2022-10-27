@@ -107,3 +107,8 @@ def SNR_adder(sig, snr):
     a = np.sqrt(es/((10**snr)*en))
     return sig + a*noi
 
+def adja(L):
+    A = -L
+    N = A.shape[0]
+    for i in range(N): A[i,i] =0
+    return A
