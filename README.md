@@ -1,3 +1,3 @@
 # Research
 
-This repo will contain the various simulations done during Summer'22 for Research.
+This repo will contain the various simulations done during the year 2022 for Research.
