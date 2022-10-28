@@ -156,6 +156,52 @@ def Combine(lengths,k,L,dt,SNR):
         V = append(V,c,axis=1)
     return U,V
 
+
+def Combine2022(lengths,k,L,dt):
+    N = L.shape[0]
+    D = diag(diag(L))
+    n = len(lengths)
+    s = np.random.randn(N,n)
+    sk,dk = Resample(k,CreateMulNoisySampLOLS(L,s[:,0],dt,lengths[0]),dt)
+    U,V = UVmatrix(lengths[0]-1,sk,dk,k,D)
+
+    for i in range(1,n):
+        sk,dk = Resample(k,CreateMulNoisySampLOLS(L,s[:,i],dt,lengths[i]),dt)  
+        b,c = UVmatrix(lengths[i]-1,sk,dk,k,D)
+        U = append(U,b,axis=1)
+        V = append(V,c,axis=1)
+    return U,V
+
+def CreateMulNoisySampLOLS(L,s0,dt,Length):
+    N = L.shape[0]
+    ewL, eVL = linalg.eig(L)
+    SampleswoN = []
+    Samples = []
+    SampleswoN.append(s0)
+
+    j = 0
+    temp = ones(N,)
+
+    while j < Length:
+        j = j+1
+        temp = dot(dot(dot(eVL, diag(exp(-ewL*dt*j))), eVL.T), s0)
+        # Samples.append(SNR_adder(temp,SNR))
+        SampleswoN.append(temp)
+        temp = SampleswoN[j-1]
+
+    del temp 
+    T = len(SampleswoN)
+    TRAJ = s0.reshape(N,1)
+
+    for i in range(1,T):
+        TRAJ = np.append(TRAJ,SampleswoN[i].reshape(N,1),axis=1)
+
+    for i in range(T):
+        Samples.append(TRAJ[:,i])
+        
+    return Samples
+
+    
 # def Combine(lengths,L,dt,SNR):
 #     N = L.shape[0]
 #     Samples = []
