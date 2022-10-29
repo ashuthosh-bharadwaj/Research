@@ -47,15 +47,16 @@ def U_synth2(u):
 
     return U
 
-def Make(N):
+def Make(sd,N):
+    np.random.randn(sd)
     A_gt = np.abs(np.random.randn(N,N))
     for i in range(N): A_gt[i,i] = 0
     A_gt = (A_gt + A_gt.T)/2
     D = np.diag(np.dot(A_gt, np.ones(N,)))
     return D, A_gt
 
-def Store(N):
-    d, a = Make(N)
+def Store(sd,N):
+    d, a = Make(sd,N)
     pkl.dump(d, open("./Data/Deg.pkl", "wb"))
     pkl.dump(a, open("./Data/Adj.pkl", "wb"))
     return "./Data/Deg.pkl" , "./Data/Adj.pkl"

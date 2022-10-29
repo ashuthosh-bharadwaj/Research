@@ -17,7 +17,7 @@ def Setup(N):
 
 def Setup2(N,s1,s2):
     np.random.seed(s1)   
-    d, a = Store(N)
+    d, a = Store(s1,N)
     # d, a  = "./Data/Deg.pkl", "./Data/Adj.pkl"
     D, A = pkl.load(open(d,"rb")), pkl.load(open(a,"rb"))
     L = D - A
@@ -25,7 +25,6 @@ def Setup2(N,s1,s2):
     np.random.seed(s2)
     s0 = numpy.random.randn(N,)
     return L, L_gt, s0,D
-
 
 def CreateNoisySamples(L,s0,dt,Lim,SNR): 
     N = L.shape[0]
@@ -141,10 +140,11 @@ def CreateMulNoisySamp(L,s0,dt,Length,SNR):
     return Samples
 
 
-def Combine(lengths,k,L,dt,SNR):
+def Combine(sd,lengths,k,L,dt,SNR):
     N = L.shape[0]
     D = diag(diag(L))
     n = len(lengths)
+    numpy.random.seed(sd)
     s = np.random.randn(N,n)
     sk,dk = Resample(k,CreateMulNoisySamp(L,s[:,0],dt,lengths[0],SNR),dt)
     U,V = UVmatrix(lengths[0]-1,sk,dk,k,D)
