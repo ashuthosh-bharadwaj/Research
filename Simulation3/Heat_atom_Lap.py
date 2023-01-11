@@ -4,9 +4,9 @@ from numpy import *
 import numpy
 import matplotlib.pyplot 
 
-def Setup(N):
+def Setup(sd,N):
     np.random.seed(100)   
-    d, a = Store(N)
+    d, a = Store(sd,N)
     # d, a  = "./Data/Deg.pkl", "./Data/Adj.pkl"
     D, A = pkl.load(open(d,"rb")), pkl.load(open(a,"rb"))
     L = D - A
